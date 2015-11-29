@@ -1,0 +1,65 @@
+# vim: sts=2 ts=2 sw=2 et ai
+
+CentOS Linux-6:
+  pkg:
+    name: docker-engine
+  pkgrepo:
+    baseurl: https://yum.dockerproject.org/repo/main/centos/6
+    gpgkey: https://yum.dockerproject.org/gpg
+
+
+CentOS Linux-7:
+  opts_type: systemd
+  pkg:
+    name: docker-engine
+  pkgrepo:
+    baseurl: https://yum.dockerproject.org/repo/main/centos/7
+    gpgkey: https://yum.dockerproject.org/gpg
+
+Debian-7:
+  opts_type: default
+  pkg:
+    name: docker-engine
+  pkgrepo:
+    name: deb https://apt.dockerproject.org/repo debian-wheezy main
+    keyid: 2C52609D
+    keyserver: keyserver.ubuntu.com
+
+Debian-8:
+  opts_type: systemd
+  pkg:
+    name: docker-engine
+  pkgrepo:
+    name: deb https://apt.dockerproject.org/repo debian-jessie main
+    keyid: 2C52609D
+    keyserver: keyserver.ubuntu.com
+
+
+Ubuntu-12.04:
+  opts_type: default
+  pkg:
+    name: docker-engine
+  pkgrepo:
+    name: deb https://apt.dockerproject.org/repo ubuntu-precise main
+    keyid: 2C52609D
+    keyserver: keyserver.ubuntu.com
+
+Ubuntu-14.04:
+  opts_type: default
+  pkg:
+    name: docker-engine
+  pkgrepo:
+    name: deb https://apt.dockerproject.org/repo ubuntu-trusty main
+    keyid: 2C52609D
+    keyserver: keyserver.ubuntu.com
+
+Ubuntu-15.04:
+  opts_type: systemd
+  pkg:
+    name: docker-engine
+  pkgrepo:
+    name: deb https://apt.dockerproject.org/repo ubuntu-vivid main
+    keyid: 2C52609D
+    keyserver: keyserver.ubuntu.com
+
+

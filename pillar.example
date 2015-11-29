@@ -1,0 +1,6 @@
+docker-pkg:
+  lookup:
+    version: 1.9.1
+    opts: "--dns=8.8.8.8 --dns=8.8.4.4"
+    users:
+      - vagrant

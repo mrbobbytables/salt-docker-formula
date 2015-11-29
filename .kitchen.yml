@@ -1,0 +1,49 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: salt_solo
+  formula: docker
+  salt_install: bootstrap
+  state_top_from_file: true
+  pillars-from-files:
+    docker.sls: pillar.example
+  pillars:
+    top.sls:
+      base:
+        '*':
+          - docker
+
+platforms:
+  - name: debian-wheezy
+    driver_plugin: vagrant
+    driver_config:
+      box: debian/wheezy64
+
+  - name: debian-jessie
+    driver_plugin: vagrant
+    driver_config:
+      box: debian/jessie64
+     
+  - name: ubuntu-trusty
+    driver_plugin: vagrant
+    driver_config:
+      box: ubuntu/trusty64
+
+  - name: ubuntu-vivid
+    driver_plugin: vagrant
+    driver_config:
+      box: ubuntu/vivid64
+    provisioner:
+      salt_install: ppa
+
+  - name: centos-7
+    driver_plugin: vagrant
+    driver_config:
+      box: centos/7
+
+suites:
+    - name: docker
+
+

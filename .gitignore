@@ -1,0 +1,6 @@
+/*.lock
+.bundle/
+.kitchen/
+.vagrant/
+vendor/
+*.swp

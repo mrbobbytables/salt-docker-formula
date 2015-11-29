@@ -1,0 +1,10 @@
+{% import_yaml 'docker/defaults.yml' as defaults %}
+{% import_yaml 'docker/os_defaults.yml' as os_defaults %}
+
+{% set pkg = salt['pillar.get']('docker-pkg:lookup', default={}, merge=true) %}
+{% do defaults.docker.update(pkg) %}
+
+{% set os_default = salt['grains.filter_by'](os_defaults, grain='osfinger') %}
+{% do defaults.docker.update(os_default) %}
+
+{% set docker = salt['pillar.get']('docker', default=defaults['docker'], merge=true) %}

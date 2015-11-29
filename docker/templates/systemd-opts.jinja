@@ -1,0 +1,5 @@
+{% from "docker/map.jinja" import docker with context %}
+
+[Service]
+ExecStart=
+ExecStart=/usr/bin/docker daemon -H fd:// {{ docker.opts }}
