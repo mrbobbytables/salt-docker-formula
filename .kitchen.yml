@@ -26,6 +26,11 @@ platforms:
     driver_config:
       box: debian/jessie64
      
+  - name: ubuntu-precise
+    driver_plugin: vagrant
+    driver_config:
+      box: ubuntu/precise64
+
   - name: ubuntu-trusty
     driver_plugin: vagrant
     driver_config:
@@ -42,6 +47,28 @@ platforms:
     driver_plugin: vagrant
     driver_config:
       box: centos/7
+
+  - name: oracle-7
+    driver_plugin: vagrant
+    driver_config:
+      box: oracle-7
+      box_url: http://cloud.terry.im/vagrant/oraclelinux-7-x86_64.box
+
+  - name: fedora-21
+    driver_plugin: vagrant
+    driver_config:
+      box: bento/fedora-21
+
+  - name: fedora-22
+    driver_plugin: vagrant
+    driver_config:
+      box: bento/fedora-22
+
+  - name: suse-13
+    driver_plugin: vagrant
+    driver_config:
+      box: bento/opensuse-13.2
+
 
 suites:
     - name: docker

@@ -5,5 +5,7 @@ include:
 {% elif grains.os_family == 'RedHat' %}
 include:
   - docker.redhat
+{% elif grains.os_family == 'Suse' %}
+include:
+  - docker.suse
 {% endif %}
-

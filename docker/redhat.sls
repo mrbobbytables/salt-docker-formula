@@ -15,7 +15,7 @@ docker-repo:
 
 docker-engine:
   pkg.installed:
-    - name: docker-engine
+    - name: {{ docker.pkg.name }}
     {% if 'version' in docker %}
     - version: "{{ docker.version }}*"
     {% endif %}
@@ -24,5 +24,5 @@ docker-engine:
 
 {% if docker.opts_type == 'systemd' %}
 include:
-  - .systemd
+  - docker.systemd
 {% endif %}

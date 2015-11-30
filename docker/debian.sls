@@ -4,7 +4,9 @@ remove-old-versions:
   pkgrepo.absent:
     - name: deb https://get.docker.com/{{ grains.os.lower() }} docker main
   pkg.purged:
-    - name: "lxc-docker*"
+    - pkgs:
+      - "lxc-docker*"
+      - "docker.io*"
 
 docker-repo-prereqs:
   pkg.installed:
@@ -24,7 +26,7 @@ docker-repo:
 
 docker-engine:
   pkg.installed:
-    - name: docker-engine
+    - name: {{ docker.pkg.name }}
     {% if 'version' in docker %}
     - version: "{{ docker.version }}*"
     {% endif %}
