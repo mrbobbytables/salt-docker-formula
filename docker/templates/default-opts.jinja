@@ -1,3 +1,7 @@
 {% from "docker/map.jinja" import docker with context %}
 
-DOCKER_OPTS="{{ docker.opts }}"
+DOCKER_OPTS="{% for option in docker.get("opts") or [] %}{{ option }} {% endfor %}"
+
+{% for env_var in docker.get("env_vars") or [] %}
+export {{ env_var }}
+{% endfor %}

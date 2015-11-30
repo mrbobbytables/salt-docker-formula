@@ -1,6 +1,6 @@
 docker-config:
   file.managed:
-    - name: /etc/systemd/system/docker.service.d/exec.conf
+    - name: /etc/systemd/system/docker.service.d/docker-opts.conf
     - source: salt://docker/templates/systemd-opts.jinja
     - template: jinja
     - user: root
