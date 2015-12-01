@@ -1,3 +1,4 @@
 base:
   '*':
     - docker
+    - docker.compose

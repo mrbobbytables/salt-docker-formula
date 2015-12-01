@@ -12,3 +12,9 @@
 {% set os_default = salt['grains.filter_by'](os_defaults, grain='osfinger') %}
 {% do defaults.docker.update(os_default) %}
 {% set docker = salt['pillar.get']('docker', default=defaults['docker'], merge=true) %}
+
+{% set compose_opts = salt['pillar.get']('compose:lookup', default={}, merge=true) %}
+{% do defaults.compose.update(compose_opts) %}
+{% set compose = salt['pillar.get']('docker', default=defaults['compose'], merge=true) %}
+
+

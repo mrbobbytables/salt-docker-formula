@@ -1,2 +1,8 @@
+compose:
+  version: 1.5.1
+  completion: true
+
 docker:
-  config: []
+  opts: []
+  env_vars: []
+  users: []

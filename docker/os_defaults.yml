@@ -61,7 +61,6 @@ Oracle Linux Server-7:
     baseurl: https://yum.dockerproject.org/repo/main/oraclelinux/7
     gpgkey: https://yum.dockerproject.org/gpg
 
-
 Ubuntu-12.04:
   opts_type: default
   pkg:
