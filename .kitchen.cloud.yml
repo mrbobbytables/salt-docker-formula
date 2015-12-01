@@ -1,0 +1,47 @@
+# concurrency test, switch to ec2 later
+
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: salt_solo
+  formula: docker
+  salt_install: bootstrap
+  state_top_from_file: true
+  pillars-from-files:
+    docker.sls: pillar.example
+  pillars:
+    top.sls:
+      base:
+        '*':
+          - docker
+
+platforms:
+  - name: debian-wheezy
+    driver_plugin: vagrant
+    driver_config:
+      box: debian/wheezy64
+      box_url: https://atlas.hashicorp.com/debian/wheezy64
+
+  - name: debian-jessie
+    driver_plugin: vagrant
+    driver_config:
+      box: debian/jessie64
+      box_url: https://atlas.hashicorp.com/debian/jessie64
+     
+  - name: ubuntu-precise
+    driver_plugin: vagrant
+    driver_config:
+      box: ubuntu/precise64
+      box_url: https://atlas.hashicorp.com/ubuntu/precise64
+
+
+  - name: ubuntu-trusty
+    driver_plugin: vagrant
+    driver_config:
+      box: ubuntu/trusty64
+      box_url: https://atlas.hashicorp.com/ubuntu/trusty64
+
+suite:
+  - name: docker

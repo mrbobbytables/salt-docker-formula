@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 
-gem 'test-kitchen'
+gem 'kitchen-ec2'
+gem 'kitchen-salt', :git => 'https://github.com/simonmcc/kitchen-salt.git', :branch => 'master'
 gem 'kitchen-vagrant'
-gem 'kitchen-salt', :git => 'https://github.com/simonmcc/kitchen-salt.git'
+gem 'rake'
 gem 'serverspec'
+gem 'test-kitchen'
