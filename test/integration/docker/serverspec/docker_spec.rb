@@ -32,7 +32,7 @@ if File.exists? ('/tmp/kitchen/srv/pillar/docker.sls')
       end
     end
 
-	  if ! docker_vars['docker']['engine']['opts'].nil?
+    if ! docker_vars['docker']['engine']['opts'].nil?
       describe command('ps -aux | grep docker') do
         docker_vars['docker']['engine']['opts'].each do |k,v|
           its(:stdout) { should contain k,v }
@@ -40,7 +40,7 @@ if File.exists? ('/tmp/kitchen/srv/pillar/docker.sls')
       end
     end
 
-	  if ! docker_vars['docker']['engine']['env_vars'].nil?
+    if ! docker_vars['docker']['engine']['env_vars'].nil?
       describe command('cat /proc/$(pgrep docker)/environ') do
         docker_vars['docker']['engine']['env_vars'].each do |k,v|
           its(:stdout) { should contain k,v }
@@ -48,17 +48,17 @@ if File.exists? ('/tmp/kitchen/srv/pillar/docker.sls')
       end
     end
 
-	  if ! docker_vars['docker']['compose']['version'].nil?
-	    describe command('/usr/local/bin/docker-compose --version') do
-		    its(:stdout) { should match docker_vars['docker']['compose']['version'] }
-	    end
-	  end
+    if ! docker_vars['docker']['compose']['version'].nil?
+      describe command('/usr/local/bin/docker-compose --version') do
+        its(:stdout) { should match docker_vars['docker']['compose']['version'] }
+      end
+    end
 
-	  if ! docker_vars['docker']['compose']['completion'].nil?
-	    describe file('/etc/bash_completion.d/docker-compose') do
+    if ! docker_vars['docker']['compose']['completion'].nil?
+      describe file('/etc/bash_completion.d/docker-compose') do
         it { should be_file }
-	    end
-	  end
+      end
+    end
 
     if ! docker_vars['docker']['engine']['users'].nil?
       describe group ('docker') do
