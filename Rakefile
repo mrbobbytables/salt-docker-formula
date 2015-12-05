@@ -9,41 +9,46 @@ namespace :test do
 
   desc 'Run test-kitchen (locally) via vagrant'
   task :vagrant, [:threads] do |t, args|
-		args.with_defaults(threads: 1)
+    args.with_defaults(threads: 1)
     @loader = Kitchen::Loader::YAML.new(local_config: '.kitchen.yml')
     config = Kitchen::Config.new(loader: @loader)
     queue = Queue.new
     config.instances.each { |i| queue << i }
-		workers = (0...args[:threads].to_i).map do
-		  Thread.new do
-				begin
+    workers = (0...args[:threads].to_i).map do
+      Thread.new do
+        begin
           while instance = queue.pop(true)
             instance.send('test')
           end
-				rescue ThreadError
+        rescue ThreadError
         end
       end
     end
     workers.map(&:join)
   end
-	
-	desc "Run test-kitchen with a cloud provider"
-  task :cloud, [:args] do |t, args|
-		args.with_defaults(threads: 10)
-		@loader = Kitchen::Loader::YAML.new(local_config: '.kitchen.cloud.yml')
-    config = Kitchen::Config.new(loader: @loader)
-    queue = Queue.new
-    config.instances.each { |i| queue << i }
-		workers = (0...args[:threads].to_i).map do
-		  Thread.new do
-				begin
-          while instance = queue.pop(true)
-            instance.send('test')
+  
+  %w(verify destroy).each do |c_task|
+    desc "Run test-kitchen with a cloud provider"
+    namespace :cloud do
+      task c_task do
+        @loader = Kitchen::Loader::YAML.new(local_config: '.kitchen.cloud.yml')
+        config = Kitchen::Config.new(loader: @loader)
+        concurrency = config.instances.size
+        queue = Queue.new
+        config.instances.each { |i| queue << i }
+        workers = (0...concurrency).map do
+          Thread.new do
+            begin
+              while instance = queue.pop(true)
+                instance.send(c_task)
+              end
+            rescue ThreadError
+            end
           end
-				rescue ThreadError
         end
+        workers.map(&:join)
       end
     end
-    workers.map(&:join)
   end
+  task cloud: [ 'cloud:verify', 'cloud:destroy']
 end

@@ -17,32 +17,26 @@ provisioner:
 
 platforms:
   - name: debian-wheezy
-    driver_plugin: vagrant
     driver_config:
       box: debian/wheezy64
       box_url: https://atlas.hashicorp.com/debian/wheezy64
 
   - name: debian-jessie
-    driver_plugin: vagrant
     driver_config:
       box: debian/jessie64
       box_url: https://atlas.hashicorp.com/debian/jessie64
      
   - name: ubuntu-precise
-    driver_plugin: vagrant
     driver_config:
       box: ubuntu/precise64
       box_url: https://atlas.hashicorp.com/ubuntu/precise64
 
-
   - name: ubuntu-trusty
-    driver_plugin: vagrant
     driver_config:
       box: ubuntu/trusty64
       box_url: https://atlas.hashicorp.com/ubuntu/trusty64
 
   - name: ubuntu-vivid
-    driver_plugin: vagrant
     driver_config:
       box: ubuntu/vivid64
       box_url: https://atlas.hashicorp.com/ubuntu/vivid64
@@ -50,31 +44,26 @@ platforms:
       salt_install: ppa
 
   - name: centos-7
-    driver_plugin: vagrant
     driver_config:
       box: centos/7
       box_url: https://atlas.hashicorp.com/centos/7
 
   - name: oracle-7
-    driver_plugin: vagrant
     driver_config:
       box: oracle-7
       box_url: http://cloud.terry.im/vagrant/oraclelinux-7-x86_64.box
 
   - name: fedora-21
-    driver_plugin: vagrant
     driver_config:
       box: bento/fedora-21
       box_url: https://atlas.hashicorp.com/bento/fedora-21
 
   - name: fedora-22
-    driver_plugin: vagrant
     driver_config:
       box: bento/fedora-22
       box_url: https://atlas.hashicorp.com/bento/fedora-22
 
   - name: suse-13
-    driver_plugin: vagrant
     driver_config:
       box: bento/opensuse-13.2
       box_url: https://atlas.hashicorp.com/bento/opensuse-13.2

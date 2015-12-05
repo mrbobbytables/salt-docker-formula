@@ -3,7 +3,7 @@
 docker-engine:
   pkg.installed:
     - name: {{ docker.pkg.name }}
-    {% if 'version' in docker %}
+    {% if 'version' in docker and docker.version is not none %}
     - version: "{{ docker.version }}*"
     {% endif %}
 

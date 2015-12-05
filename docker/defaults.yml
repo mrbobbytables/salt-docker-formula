@@ -1,8 +1,7 @@
 compose:
-  version: 1.5.1
+  version:
   completion: true
 
 docker:
-  opts: []
-  env_vars: []
-  users: []
+  opts: {}
+  env_vars: {}

@@ -2,9 +2,12 @@
 
 [Service]
 ExecStart=
-ExecStart=/usr/bin/docker daemon -H fd:// {% for option in docker.get("opts") or [] %}{{ option }} {% endfor %}
+ExecStart=/usr/bin/docker daemon -H fd:// 
+{%- for key, value in docker.get("opts").iteritems() -%}
+{% for opt in value %} --{{ key }}={{ opt }}{% endfor %}
+{%- endfor -%}
 
-{% for env_var in docker.get("env_vars") or [] %}
-Environment="{{ env_var }}"
-{% endfor %}
+{% for key, value in docker.get("env_vars").iteritems() %}
+Environment={{key}}={{value}}
+{%- endfor -%}
 

@@ -1,20 +1,30 @@
+# -*- coding: utf-8 -*-
+# vim: ft=jinja
+
+{% import_yaml 'docker/defaults.yml' as defaults %}
+{% import_yaml 'docker/osmap.yml' as osmap %}
+
+
+{# suse does not have an 'osfinger' grain. The below jinja well generate one for use #}
 {% if grains.os_family == 'Suse' %}
 {% set suse_osfinger = [grains.os, grains.osrelease_info[0]]|join("-") %}
 {{ salt['grains.set'](key='osfinger', val=suse_osfinger) }}
 {% endif %}
 
-
-{% import_yaml 'docker/defaults.yml' as defaults %}
-{% import_yaml 'docker/os_defaults.yml' as os_defaults %}
-
-{% set pkg = salt['pillar.get']('docker-pkg:lookup', default={}, merge=true) %}
-{% do defaults.docker.update(pkg) %}
-{% set os_default = salt['grains.filter_by'](os_defaults, grain='osfinger') %}
+{# get defaults based on the osfinger grain and apply them #}
+{% set os_default = salt['grains.filter_by'](osmap, grain='osfinger') %}
 {% do defaults.docker.update(os_default) %}
-{% set docker = salt['pillar.get']('docker', default=defaults['docker'], merge=true) %}
 
-{% set compose_opts = salt['pillar.get']('compose:lookup', default={}, merge=true) %}
+{# if any pillar data is present, merge it with the osdefaults prefering the pillar data #}
+{% set engine_opts = salt['pillar.get']('docker:engine', default=defaults.docker, merge=true) %}
+{% do defaults.docker.update(engine_opts) %}
+
+
+{% set compose_opts = salt['pillar.get']('docker:compose', default=defaults.compose, merge=true) %}
 {% do defaults.compose.update(compose_opts) %}
-{% set compose = salt['pillar.get']('docker', default=defaults['compose'], merge=true) %}
+
+
+{% set docker = defaults.docker %}
+{% set compose = defaults.compose %}
 
 

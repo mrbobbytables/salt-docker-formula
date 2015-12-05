@@ -2,7 +2,19 @@
 
 ---
 driver:
-  name: vagrant
+  name: ec2
+  aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
+  security_group_ids: [ "<%= ENV['AWS_SGROUP_ID'] %>" ]
+  region: us-west-2
+  availability_zone: b
+  instance_type: t2.micro
+  associate_public_ip: true
+#  require_chef_omnibus: true
+
+transport:
+  ssh_key: provision.key
+  connection_timeout: 10
+  connection_retries: 10
 
 provisioner:
   name: salt_solo
@@ -10,7 +22,7 @@ provisioner:
   salt_install: bootstrap
   state_top_from_file: true
   pillars-from-files:
-    docker.sls: pillar.example
+    docker.sls: pillar.cloud.example
   pillars:
     top.sls:
       base:
@@ -18,30 +30,31 @@ provisioner:
           - docker
 
 platforms:
-  - name: debian-wheezy
-    driver_plugin: vagrant
-    driver_config:
-      box: debian/wheezy64
-      box_url: https://atlas.hashicorp.com/debian/wheezy64
 
-  - name: debian-jessie
-    driver_plugin: vagrant
-    driver_config:
-      box: debian/jessie64
-      box_url: https://atlas.hashicorp.com/debian/jessie64
-     
-  - name: ubuntu-precise
-    driver_plugin: vagrant
-    driver_config:
-      box: ubuntu/precise64
-      box_url: https://atlas.hashicorp.com/ubuntu/precise64
+  - name: precise
+    transport:
+      username: ubuntu
+    driver:
+      image_search:
+       name: "ubuntu/images/hvm/ubuntu-precise-12.04-amd64-server-*"
 
+  - name: trusty
+    transport:
+      username: ubuntu
+    driver:
+      image_search:
+          name: "ubuntu/images/hvm/ubuntu-trusty-14.04-amd64-server-*"
 
-  - name: ubuntu-trusty
-    driver_plugin: vagrant
-    driver_config:
-      box: ubuntu/trusty64
-      box_url: https://atlas.hashicorp.com/ubuntu/trusty64
+  - name: vivid
+    transport:
+      username: ubuntu
+    driver:
+      image_search:
+        name: "ubuntu/images/hvm/ubuntu-vivid-15.04-amd64-server-*"
+    provisioner:
+      salt_install: ppa
+      
+
 
 suite:
   - name: docker
