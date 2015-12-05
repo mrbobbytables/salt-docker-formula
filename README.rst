@@ -20,7 +20,6 @@ Tested with the following platforms:
 
 
 .. contents::
-    :local:
 
 States
 ======
@@ -44,7 +43,7 @@ Adds Official Docker repositories and installs docker-engine.
 
   docker:
     engine:
-      version: 1.9.1
+      version: 1.9.0
       env_vars:
         DOCKER_HOST: /var/run/docker.sock
         TLS_VERIFY: TRUE
@@ -76,4 +75,4 @@ Installs docker-compose and if specified, the bash-completion module as well.
 ----------------
 
 Creates the docker group and adds any user specified in the docker engine pillar to be added to the group.
-This group is granted rights to execute docker without having to `sudo`.
+This group is granted rights to execute docker without having to ``sudo``.
