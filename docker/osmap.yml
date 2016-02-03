@@ -5,9 +5,6 @@ CentOS Linux-7:
   pkgrepo:
     baseurl: https://yum.dockerproject.org/repo/main/centos/7
     gpgkey: https://yum.dockerproject.org/gpg
-  opts:
-    storage-driver:
-      - overlay
 
 Debian-7:
   opts_type: default
@@ -42,9 +39,6 @@ Fedora-22:
   pkgrepo:
     baseurl: https://yum.dockerproject.org/repo/main/fedora/22
     gpgkey: https://yum.dockerproject.org/gpg
-  opts:
-    storage-driver:
-      - overlay
 
 openSUSE-13:
   opts_type: systemd
@@ -76,6 +70,9 @@ Ubuntu-14.04:
     name: deb https://apt.dockerproject.org/repo ubuntu-trusty main
     keyid: 2C52609D
     keyserver: keyserver.ubuntu.com
+  opts:
+    storage-driver:
+      - aufs
 
 Ubuntu-15.04:
   opts_type: systemd
@@ -87,5 +84,4 @@ Ubuntu-15.04:
     keyserver: keyserver.ubuntu.com
   opts:
     storage-driver:
-      - overlay
-
+      - aufs

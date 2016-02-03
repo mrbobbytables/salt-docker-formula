@@ -1,10 +1,10 @@
 docker:
   compose:
-    version: 1.5.1
+    version: 1.5.2
     completion: true
 
   engine:
-    version: 1.9.0
+    version: 1.9.1
     env_vars:
       DOCKER_HOST: /var/run/docker.sock
       TLS_VERIFY: TRUE

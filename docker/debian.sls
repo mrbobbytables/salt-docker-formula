@@ -10,7 +10,11 @@ remove-old-versions:
 
 docker-repo-prereqs:
   pkg.installed:
-    - name: apt-transport-https
+    - pkgs:
+      - apt-transport-https
+{% if docker.opts|selectattr("storage-driver", "equalto", "aufs") %}
+      - linux-image-extra-{{grains.kernelrelease}}
+{% endif %}
 
 docker-repo:
   pkgrepo.managed:
@@ -22,7 +26,7 @@ docker-repo:
     - clean_file: true
     - refresh_db: true
     - require:
-      - pkg: apt-transport-https
+      - pkg: docker-repo-prereqs
 
 docker-engine:
   pkg.installed:
