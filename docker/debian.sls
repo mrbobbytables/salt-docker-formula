@@ -12,7 +12,9 @@ docker-repo-prereqs:
   pkg.installed:
     - pkgs:
       - apt-transport-https
-{% if docker.opts|selectattr("storage-driver", "equalto", "aufs") %}
+{# cannot use docker.opts|selectattr("storage-driver", "equalto", "aufs") in this instance to maintain #}
+{# compatibility with ubuntu precise #}
+{% if 'storage-driver' in docker.opts and docker.opts['storage-driver'][0] == 'aufs' %}
       - linux-image-extra-{{grains.kernelrelease}}
 {% endif %}
 
