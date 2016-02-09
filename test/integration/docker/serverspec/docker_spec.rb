@@ -26,45 +26,45 @@ if File.exists? ('/tmp/kitchen/srv/pillar/docker.sls')
   docker_vars = YAML.load_file('/tmp/kitchen/srv/pillar/docker.sls')
   if ! docker_vars.nil?
 
-    if ! docker_vars['docker']['engine']['version'].nil?
+    if ! docker_vars['docker']['lookup']['engine']['version'].nil?
       describe command('docker --version') do
-        its(:stdout) { should match docker_vars['docker']['engine']['version'] }
+        its(:stdout) { should match docker_vars['docker']['lookup']['engine']['version'] }
       end
     end
 
-    if ! docker_vars['docker']['engine']['opts'].nil?
+    if ! docker_vars['docker']['lookup']['engine']['opts'].nil?
       describe command('ps -aux | grep docker') do
-        docker_vars['docker']['engine']['opts'].each do |k,v|
+        docker_vars['docker']['lookup']['engine']['opts'].each do |k,v|
           its(:stdout) { should contain k,v }
         end
       end
     end
 
-    if ! docker_vars['docker']['engine']['env_vars'].nil?
+    if ! docker_vars['docker']['lookup']['engine']['env_vars'].nil?
       describe command('cat /proc/$(pgrep docker)/environ') do
-        docker_vars['docker']['engine']['env_vars'].each do |k,v|
+        docker_vars['docker']['lookup']['engine']['env_vars'].each do |k,v|
           its(:stdout) { should contain k,v }
         end
       end
     end
 
-    if ! docker_vars['docker']['compose']['version'].nil?
+    if ! docker_vars['docker']['lookup']['compose']['version'].nil?
       describe command('/usr/local/bin/docker-compose --version') do
-        its(:stdout) { should match docker_vars['docker']['compose']['version'] }
+        its(:stdout) { should match docker_vars['docker']['lookup']['compose']['version'] }
       end
     end
 
-    if ! docker_vars['docker']['compose']['completion'].nil?
+    if ! docker_vars['docker']['lookup']['compose']['completion'].nil?
       describe file('/etc/bash_completion.d/docker-compose') do
         it { should be_file }
       end
     end
 
-    if ! docker_vars['docker']['engine']['users'].nil?
+    if ! docker_vars['docker']['lookup']['engine']['users'].nil?
       describe group ('docker') do
         it { should exist }
       end  
-      docker_vars['docker']['engine']['users'].each do |user|
+      docker_vars['docker']['lookup']['engine']['users'].each do |user|
         describe user(user) do
           it { should belong_to_group 'docker' }
         end

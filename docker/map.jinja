@@ -16,11 +16,11 @@
 {% do defaults.docker.update(os_default) %}
 
 {# if any pillar data is present, merge it with the osdefaults prefering the pillar data #}
-{% set engine_opts = salt['pillar.get']('docker:engine', default=defaults.docker, merge=true) %}
+{% set engine_opts = salt['pillar.get']('docker:lookup:engine', default=defaults.docker, merge=true) %}
 {% do defaults.docker.update(engine_opts) %}
 
 
-{% set compose_opts = salt['pillar.get']('docker:compose', default=defaults.compose, merge=true) %}
+{% set compose_opts = salt['pillar.get']('docker:lookup:compose', default=defaults.compose, merge=true) %}
 {% do defaults.compose.update(compose_opts) %}
 
 
