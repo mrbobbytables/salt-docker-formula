@@ -63,6 +63,11 @@ platforms:
       box: bento/fedora-22
       box_url: https://atlas.hashicorp.com/bento/fedora-22
 
+  - name: fedora-23
+    driver_config:
+      box: bento/fedora-23
+      box_url: https://atlas.hashicorp.com/bento/fedora-23
+
   - name: suse-13
     driver_config:
       box: bento/opensuse-13.2

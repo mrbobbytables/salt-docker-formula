@@ -1,7 +1,7 @@
 ======
 Docker
 ======
-.. image:: https://travis-ci.org/mrbobbytables/salty-docker.svg?branch=master
+.. image:: https://travis-ci.org/mrbobbytables/salt-docker-formula.svg?branch=master
 
 Formula for managing the install and configuration of both Docker-Engine and Docker-Compose.
 
@@ -41,21 +41,19 @@ Adds Official Docker repositories and installs docker-engine.
 
 ::
 
-  docker:
+docker:
+  lookup:
     engine:
-      version: 1.9.0
+      version: 1.10.1
       env_vars:
         DOCKER_HOST: /var/run/docker.sock
         TLS_VERIFY: TRUE
-      opts:
-        dns:
+      opts: 
+        dns: 
           - 8.8.8.8
           - 8.8.4.4
-        storage-driver:
-          - overlay
       users:
         - vagrant
-
 
 ``docker.compose``
 ------------------
@@ -66,10 +64,12 @@ Installs docker-compose and if specified, the bash-completion module as well.
 
 ::
 
-  docker:
+docker:
+  lookup:
     compose:
-      version: 1.5.1
+      version: 1.6.0
       completion: true
+
 
 ``docker.users``
 ----------------
