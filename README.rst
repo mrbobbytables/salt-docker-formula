@@ -41,19 +41,20 @@ Adds Official Docker repositories and installs docker-engine.
 
 ::
 
-docker:
-  lookup:
-    engine:
-      version: 1.10.1
-      env_vars:
-        DOCKER_HOST: /var/run/docker.sock
-        TLS_VERIFY: TRUE
-      opts: 
-        dns: 
-          - 8.8.8.8
-          - 8.8.4.4
-      users:
-        - vagrant
+  docker:
+    lookup:
+      engine:
+        version: 1.10.1
+        env_vars:
+          DOCKER_HOST: /var/run/docker.sock
+          TLS_VERIFY: TRUE
+        opts: 
+          dns: 
+            - 8.8.8.8
+            - 8.8.4.4
+        users:
+          - vagrant
+
 
 ``docker.compose``
 ------------------
@@ -64,11 +65,11 @@ Installs docker-compose and if specified, the bash-completion module as well.
 
 ::
 
-docker:
-  lookup:
-    compose:
-      version: 1.6.0
-      completion: true
+  docker:
+    lookup:
+      compose:
+        version: 1.6.0
+        completion: true
 
 
 ``docker.users``
