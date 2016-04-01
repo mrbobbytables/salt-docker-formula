@@ -3,7 +3,6 @@
 curl:
   pkg.installed
 
-
 get-compose:
   cmd.run:
     - name: |
@@ -13,8 +12,8 @@ get-compose:
     - require:
       - pkg: curl
 
-{% if compose.completion == true %}
-get-completion:
+{% if compose.completion %}
+get-compose-completion:
   cmd.wait:
     - name: |
         curl -L https://raw.githubusercontent.com/docker/compose/{{ compose.version }}/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose

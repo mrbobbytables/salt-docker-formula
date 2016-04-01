@@ -1,5 +1,4 @@
 base:
   '*':
-    - docker
+    - docker.engine
     - docker.compose
-    - docker.users

@@ -1,19 +1,51 @@
 ---
 driver:
   name: vagrant
+  vagrantfile_erb: Vagrantfile_local.erb
 
 provisioner:
   name: salt_solo
   formula: docker
   salt_install: bootstrap
+  salt_bootstrap_options: -P git v2015.8.8
   state_top_from_file: true
-  pillars-from-files:
-    docker.sls: pillar.example
   pillars:
     top.sls:
       base:
         '*':
           - docker
+
+
+suites:
+  - name: compose
+    provisioner:
+      pillars-from-files:
+        docker.sls: pillar.example
+      state_top:
+        base:
+          '*':
+            - docker.compose
+  - name: engine
+    provisioner:
+      pillars-from-files:
+        docker.sls: pillar.example
+      state_top:
+        base:
+          '*':
+            - docker.engine
+  - name: engine-cs
+    provisioner:
+      pillars-from-files:
+        docker.sls: pillar.cs.example
+      state_top:
+        base:
+          '*':
+            - docker.engine
+    excludes:
+      - ubuntu-vivid
+      - fedora-22
+      - fedora-23
+      - suse-13
 
 platforms:
   - name: debian-wheezy
@@ -40,8 +72,6 @@ platforms:
     driver_config:
       box: ubuntu/vivid64
       box_url: https://atlas.hashicorp.com/ubuntu/vivid64
-    provisioner:
-      salt_install: ppa
 
   - name: centos-7
     driver_config:
@@ -52,11 +82,6 @@ platforms:
     driver_config:
       box: oracle-7
       box_url: http://cloud.terry.im/vagrant/oraclelinux-7-x86_64.box
-
-  - name: fedora-21
-    driver_config:
-      box: bento/fedora-21
-      box_url: https://atlas.hashicorp.com/bento/fedora-21
 
   - name: fedora-22
     driver_config:
@@ -72,9 +97,5 @@ platforms:
     driver_config:
       box: bento/opensuse-13.2
       box_url: https://atlas.hashicorp.com/bento/opensuse-13.2
-
-
-suites:
-  - name: docker
 
 

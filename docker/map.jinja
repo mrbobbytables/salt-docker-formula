@@ -2,29 +2,96 @@
 # vim: ft=jinja
 
 {% import_yaml 'docker/defaults.yml' as defaults %}
-{% import_yaml 'docker/osmap.yml' as osmap %}
+{% import_yaml 'docker/osfamily.yml' as os_family %}
+
+{# get defaults based on the os_family grain and apply them #}
+{% set os_defaults = salt['grains.filter_by'](os_family, grain='os_family') %}
+{% set keyserver = salt['pillar.get']('docker:lookup:engine:pkg:keyserver', default=defaults.engine.pkg.keyserver) %}
+{% set cs_keyid = '0xEE6D536CF7DC86E2D7D56F59A178AC6C6238F52E' %}
+{% set os_keyid = '0x58118E89F3A912897C070ADBF76221572C52609D' %}
+
+{# set repo defaults based on open source or commercial version #}
+{# the formula only supports installing the commercial version on debian or redhat based systems #}
+
+{% if salt['pillar.get']('docker:lookup:engine:cs_engine', default=False) %}
+
+  {% set repo_version = salt['pillar.get']('docker:lookup:engine:version').split('.') %}
+
+  {% set repo_base_path = 'https://packages.docker.com/' ~ repo_version[0] ~ '.' ~ repo_version[1] %}
+  {% set repo_key_url = 'https://' ~ keyserver ~ '/pks/lookup?op=get&search=' ~ cs_keyid %}
+
+  {% if salt['grains.get']('os_family') == 'Debian' %}
+    {% set repo_distrib = salt['grains.get']('os')|lower ~ '-' ~ salt['grains.get']('oscodename')|lower  %}
+    {% set repo_name = 'deb ' ~ repo_base_path ~ '/apt/repo '  ~ repo_distrib ~ ' main' %}
+    {% set tmp_os_defaults = {
+      'pkg': {
+        'source': repo_name,
+        'key_url': repo_key_url
+      }
+    } %}
+  {% elif salt['grains.get']('os_family') == 'RedHat' %}
+    {% set repo_name = repo_base_path ~ '/yum/repo/main/centos/' ~ salt['grains.get']('osmajorrelease')|lower %}
+    {% set tmp_os_defaults = {
+      'pkg': {
+        'source': repo_name,
+        'key_url': repo_key_url
+      }
+    } %}
+  {% endif %}
+
+  {% do salt['slsutil.update'](os_defaults, tmp_os_defaults) %}
+
+{% else %}
+
+  {% set repo_key_url = 'https://' ~ keyserver ~ '/pks/lookup?op=get&search=' ~ os_keyid %}
+
+  {% if salt['grains.get']('os_family') == 'Debian' %}
+    {% set repo_base_path = 'https://apt.dockerproject.org/repo' %}
+    {% set repo_distrib =  salt['grains.get']('os')|lower ~ '-' ~ salt['grains.get']('oscodename')|lower %}
+    {% set repo_name = 'deb ' ~ repo_base_path ~ ' ' ~ repo_distrib ~ ' main' %}
+    {% set tmp_os_defaults = {
+      'pkg': {
+        'source': repo_name,
+        'key_url': repo_key_url
+      }
+    } %}
+  {% elif salt['grains.get']('os_family') == 'RedHat' %}
+    {% set repo_base_path = 'https://yum.dockerproject.org/repo/main/' %}
+    {% set repo_os = salt['grains.get']('os')|lower %}
+
+    {% if repo_os in ['centos', 'redhat'] %}
+      {% set repo_name = repo_base_path ~ 'centos/' ~ salt['grains.get']('osmajorrelease')|lower %}
+    {% elif repo_os == 'fedora' %}
+      {% set repo_name = repo_base_path ~ 'fedora/' ~ salt['grains.get']('osmajorrelease')|lower %}
+    {% elif repo_os == 'oel' %}
+      {% set repo_name = repo_base_path ~ 'oraclelinux/' ~ salt['grains.get']('osmajorrelease')|lower %}
+    {% endif %}
+
+    {% set tmp_os_defaults = {
+      'pkg': {
+        'source': repo_name,
+        'key_url': repo_key_url
+      }
+    } %}
+  {% endif %}
+
+  {% do salt['slsutil.update'](os_defaults, tmp_os_defaults) %}
+
+{% endif %}  
 
 
-{# suse does not have an 'osfinger' grain. The below jinja well generate one for use #}
-{% if grains.os_family == 'Suse' %}
-{% set suse_osfinger = [grains.os, grains.osrelease_info[0]]|join("-") %}
-{{ salt['grains.set'](key='osfinger', val=suse_osfinger) }}
+{% set provider = salt['test.provider']('service')|lower %}
+{% if provider == 'systemd' %}
+  {% do salt['slsutil.update'](os_defaults, {'opts_type' : 'systemd'}) %}
+{% elif provider in [ 'upstart', 'debian_service'] %}
+  {% do salt['slsutil.update'](os_defaults, {'opts_type' : 'default'}) %}
 {% endif %}
 
-{# get defaults based on the osfinger grain and apply them #}
-{% set os_default = salt['grains.filter_by'](osmap, grain='osfinger') %}
-{% do defaults.docker.update(os_default) %}
+
+{% do salt['slsutil.update'](defaults.engine, os_defaults) %}
+
 
 {# if any pillar data is present, merge it with the osdefaults prefering the pillar data #}
-{% set engine_opts = salt['pillar.get']('docker:lookup:engine', default=defaults.docker, merge=true) %}
-{% do defaults.docker.update(engine_opts) %}
-
-
-{% set compose_opts = salt['pillar.get']('docker:lookup:compose', default=defaults.compose, merge=true) %}
-{% do defaults.compose.update(compose_opts) %}
-
-
-{% set docker = defaults.docker %}
-{% set compose = defaults.compose %}
-
+{% set engine = salt['pillar.get']('docker:lookup:engine', default=defaults.engine, merge=true) %}
+{% set compose = salt['pillar.get']('docker:lookup:compose', default=defaults.compose, merge=true) %}
 
