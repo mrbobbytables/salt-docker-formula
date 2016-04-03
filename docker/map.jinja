@@ -55,6 +55,7 @@
         'key_url': repo_key_url
       }
     } %}
+    {% do salt['slsutil.update'](os_defaults, tmp_os_defaults) %}
   {% elif salt['grains.get']('os_family') == 'RedHat' %}
     {% set repo_base_path = 'https://yum.dockerproject.org/repo/main/' %}
     {% set repo_os = salt['grains.get']('os')|lower %}
@@ -73,10 +74,8 @@
         'key_url': repo_key_url
       }
     } %}
+    {% do salt['slsutil.update'](os_defaults, tmp_os_defaults) %}
   {% endif %}
-
-  {% do salt['slsutil.update'](os_defaults, tmp_os_defaults) %}
-
 {% endif %}  
 
 

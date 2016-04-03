@@ -1,9 +1,10 @@
 {% from "docker/map.jinja" import engine with context %}
 
+
 docker-engine-install:
   pkg.installed:
-    - name: {{ docker.pkg.name }}
-    {% if 'version' in docker and docker.version is not none %}
+    - name: {{ engine.pkg.name }}
+    {% if 'version' in engine and engine.version is not none %}
     - version: "{{ engine.version }}*"
     {% endif %}
 

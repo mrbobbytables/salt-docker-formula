@@ -1,3 +1,5 @@
+{% from 'docker/map.jinja' import engine with context %}
+
 docker-engine-config:
   file.managed:
     - name: /etc/systemd/system/docker.service.d/docker-opts.conf
@@ -18,7 +20,7 @@ docker-engine-service:
     - enable: true
     - restart: true
     - require:
-      - pkg: docker-engine
+      - pkg: {{ engine.pkg.name }}
     - watch:
       - file: docker-engine-config
 
