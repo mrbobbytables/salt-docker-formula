@@ -5,7 +5,8 @@ docker:
       completion: true
 
     engine:
-      version: 1.10.3
+      cs_engine: true
+      version: '1.10'
       env_vars:
         DOCKER_HOST: /var/run/docker.sock
         TLS_VERIFY: TRUE
@@ -14,4 +15,4 @@ docker:
           - 8.8.8.8
           - 8.8.4.4
       users:
-        - ubuntu
+        - vagrant

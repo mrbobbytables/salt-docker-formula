@@ -1,7 +1,9 @@
-docker-config:
+{% from 'docker/map.jinja' import engine with context %}
+
+docker-engine-config:
   file.managed:
     - name: /etc/systemd/system/docker.service.d/docker-opts.conf
-    - source: salt://docker/templates/systemd-opts.jinja
+    - source: salt://docker/engine/templates/systemd-opts.jinja
     - template: jinja
     - user: root
     - group: root
@@ -10,16 +12,16 @@ docker-config:
   module.wait:
     - name: service.systemctl_reload
     - watch:
-      - file: docker-config
+      - file: docker-engine-config
 
-docker-service:
+docker-engine-service:
   service.running:
     - name: docker
     - enable: true
     - restart: true
     - require:
-      - pkg: docker-engine
+      - pkg: {{ engine.pkg.name }}
     - watch:
-      - file: docker-config
+      - file: docker-engine-config
 
 

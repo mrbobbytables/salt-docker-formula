@@ -20,14 +20,43 @@ provisioner:
   name: salt_solo
   formula: docker
   salt_install: bootstrap
-  state_top_from_file: true
-  pillars-from-files:
-    docker.sls: pillar.cloud.example
+  salt_bootstrap_options: -P git v2015.8.4
   pillars:
     top.sls:
       base:
         '*':
           - docker
+
+
+suites:
+  - name: compose
+    provisioner:
+      pillars-from-files:
+        docker.sls: pillar.cloud.example
+      state_top:
+        base:
+          '*':
+            - docker.compose.install
+
+  - name: engine
+    provisioner:
+      pillars-from-files:
+        docker.sls: pillar.cloud.example
+      state_top:
+        base:
+          '*':
+            - docker.engine.install
+            - docker.engine.users
+
+  - name: csengine
+    provisioner:
+      pillars-from-files:
+        docker.sls: pillar.cs.cloud.example
+      state_top:
+        base:
+          '*':
+            - docker.engine.install
+            - docker.engine.users
 
 platforms:
 
@@ -45,16 +74,3 @@ platforms:
       image_search:
           name: "ubuntu/images/hvm/ubuntu-trusty-14.04-amd64-server-*"
 
-  - name: vivid
-    transport:
-      username: ubuntu
-    driver:
-      image_search:
-        name: "ubuntu/images/hvm/ubuntu-vivid-15.04-amd64-server-*"
-    provisioner:
-      salt_install: ppa
-      
-
-
-suite:
-  - name: docker

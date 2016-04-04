@@ -1,80 +1,122 @@
 ---
 driver:
   name: vagrant
+  vagrantfile_erb: Vagrantfile_local.erb
 
 provisioner:
   name: salt_solo
   formula: docker
   salt_install: bootstrap
-  state_top_from_file: true
-  pillars-from-files:
-    docker.sls: pillar.example
   pillars:
     top.sls:
       base:
         '*':
           - docker
 
+
+suites:
+  - name: compose
+    provisioner:
+      pillars-from-files:
+        docker.sls: pillar.example
+      state_top:
+        base:
+          '*':
+            - docker.compose.install
+
+  - name: engine
+    provisioner:
+      pillars-from-files:
+        docker.sls: pillar.example
+      state_top:
+        base:
+          '*':
+            - docker.engine
+
+  - name: csengine
+    provisioner:
+      pillars-from-files:
+        docker.sls: pillar.cs.example
+      state_top:
+        base:
+          '*':
+            - docker.engine
+    excludes:
+      - ubuntu-vivid
+      - fedora-22
+      - fedora-23
+      - suse-13
+
 platforms:
   - name: debian-wheezy
+    provisioner:
+      salt_bootstrap_options: -P git v2015.8.4
     driver_config:
       box: debian/wheezy64
       box_url: https://atlas.hashicorp.com/debian/wheezy64
 
   - name: debian-jessie
+    provisioner:
+      salt_bootstrap_options: -P git v2015.8.4
     driver_config:
       box: debian/jessie64
       box_url: https://atlas.hashicorp.com/debian/jessie64
      
   - name: ubuntu-precise
+    provisioner:
+      salt_bootstrap_options: -P git v2015.8.4
     driver_config:
       box: ubuntu/precise64
       box_url: https://atlas.hashicorp.com/ubuntu/precise64
 
   - name: ubuntu-trusty
+    provisioner:
+      salt_bootstrap_options: -P git v2015.8.4
     driver_config:
       box: ubuntu/trusty64
       box_url: https://atlas.hashicorp.com/ubuntu/trusty64
 
   - name: ubuntu-vivid
+    provisioner:
+      salt_bootstrap_options: -P git v2015.8.4
     driver_config:
       box: ubuntu/vivid64
       box_url: https://atlas.hashicorp.com/ubuntu/vivid64
-    provisioner:
-      salt_install: ppa
 
   - name: centos-7
+    provisioner:
+      salt_bootstrap_options: -P git v2015.8.4
     driver_config:
       box: centos/7
       box_url: https://atlas.hashicorp.com/centos/7
 
   - name: oracle-7
+    provisioner:
+      salt_bootstrap_options: -P git v2015.8.4
     driver_config:
       box: oracle-7
       box_url: http://cloud.terry.im/vagrant/oraclelinux-7-x86_64.box
 
-  - name: fedora-21
-    driver_config:
-      box: bento/fedora-21
-      box_url: https://atlas.hashicorp.com/bento/fedora-21
-
   - name: fedora-22
+    provisioner:
+      salt_bootstrap_options: -P git v2015.8.4
     driver_config:
       box: bento/fedora-22
       box_url: https://atlas.hashicorp.com/bento/fedora-22
 
   - name: fedora-23
+    provisioner:
+      salt_bootstrap_options: -P git v2015.8.4
     driver_config:
       box: bento/fedora-23
       box_url: https://atlas.hashicorp.com/bento/fedora-23
 
-  - name: suse-13
-    driver_config:
-      box: bento/opensuse-13.2
-      box_url: https://atlas.hashicorp.com/bento/opensuse-13.2
-
-
-suites:
-  - name: docker
-
+# suse's repos are not up to date with the official repos
+# have to use an older version, to test back the version to
+# 1.9.1
+# 
+#  - name: suse-13
+#    driver_config:
+#      box: bento/opensuse-13.2
+#      box_url: https://atlas.hashicorp.com/bento/opensuse-13.2
 

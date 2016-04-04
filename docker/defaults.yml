@@ -2,6 +2,9 @@ compose:
   version:
   completion: true
 
-docker:
+engine:
+  pkg:
+    keyserver: keyserver.ubuntu.com
+  cs_engine: false
   opts: {}
   env_vars: {}

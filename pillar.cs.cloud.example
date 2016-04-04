@@ -5,6 +5,7 @@ docker:
       completion: true
 
     engine:
+      cs_engine: true
       version: 1.10.3
       env_vars:
         DOCKER_HOST: /var/run/docker.sock
