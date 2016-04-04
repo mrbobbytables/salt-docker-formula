@@ -61,9 +61,15 @@ namespace :test do
 
  
   aws_env_vars = ['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'AWS_SSH_KEY_ID', 'AWS_SGROUP_ID']
-  missing_aws_vars = aws_env_vars.find_all { |v| ENV[v] == nil }
+  missing_aws_vars = []
 
-  if not missing_aws_vars.empty?
+  aws_env_vars.each do | aws_var |
+    if not ENV.has_key? aws_var 
+      missing_aws_vars.push(aws_var)
+    end
+  end
+
+  if missing_aws_vars.empty?
     desc 'Execute the full cloud test suites for engine, engine-cs, and compose.'
     task :cloud do
       @loader = Kitchen::Loader::YAML.new(local_config: '.kitchen.cloud.yml')

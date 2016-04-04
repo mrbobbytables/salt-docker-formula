@@ -13,7 +13,7 @@ before_install:
 - bundle install
 
 script:
-  - ./travis_wrapper.rb bundle exec rake test:cloud:verify
+  - ./travis_wrapper.rb bundle exec rake test:cloud
 
 after_script:
   - bundle exec rake test:cloud:destroy
