@@ -5,7 +5,7 @@ task :default => 'test:vagrant'
 
   def task_runner(config, suite_name, action, concurrency)
     task_queue = Queue.new
-    instances = config.instances.select { | obj | obj.suite.name  =~ /#{suite_name}/ }
+    instances = config.instances.select { | obj | obj.suite.name  =~ /^#{suite_name}$/ }
     instances.each { |i| task_queue << i }
     workers = (0...concurrency).map do
       Thread.new do
@@ -27,8 +27,13 @@ namespace :test do
 
   Kitchen.logger = Kitchen.default_file_logger
 
-  desc 'Execute the full Vagrant test suites for engine, engine-cs, and compose'
-  task :vagrant => ['vagrant:engine', 'vagrant:engine_cs', 'vagrant:compose']
+  desc 'Execute the full Vagrant test suites for engine, csengine, and compose'
+  task :vagrant do
+    @loader = Kitchen::Loader::YAML.new(local_config: '.kitchen.yml')
+    config = Kitchen::Config.new(loader: @loader)
+    concurrency = (ENV["concurrency"] || "1").to_i
+    task_runner(config, '.*', 'test', concurrency)
+  end
 
 
   namespace :vagrant do
@@ -43,8 +48,8 @@ namespace :test do
     end
 
     desc 'Execute the Vagrant test suite for the Commercially Supported Docker Engine.'
-    task :engine_cs do
-      task_runner(config, 'engine-cs', 'test', concurrency)
+    task :csengine do
+      task_runner(config, 'csengine', 'test', concurrency)
     end
 
     desc 'Execute the Vagrant test suite for Docker Compose'
@@ -70,7 +75,8 @@ namespace :test do
   end
 
   if missing_aws_vars.empty?
-    desc 'Execute the full cloud test suites for engine, engine-cs, and compose.'
+
+    desc 'Execute the full cloud test suites for engine, csengine, and compose.'
     task :cloud do
       @loader = Kitchen::Loader::YAML.new(local_config: '.kitchen.cloud.yml')
       config = Kitchen::Config.new(loader: @loader)
@@ -82,7 +88,7 @@ namespace :test do
 
       @loader = Kitchen::Loader::YAML.new(local_config: '.kitchen.cloud.yml')
       config = Kitchen::Config.new(loader: @loader)
-      concurrency = config.instances.size
+      concurrency = (ENV["concurrency"] || "10").to_i
 
       desc 'Execute the Cloud test suite for the Open Source Docker Engine.'
       task :engine do
@@ -90,8 +96,8 @@ namespace :test do
       end
 
       desc 'Execute the Cloud test suite for the Commercially Supported Docker Engine.'
-      task :engine_cs do
-        task_runner(config, 'engine-cs', 'test', concurrency)
+      task :csengine do
+        task_runner(config, 'csengine', 'test', concurrency)
       end
 
       desc 'Execute the Cloud test suite for Docker Compose'

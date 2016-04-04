@@ -33,7 +33,7 @@ suites:
           '*':
             - docker.engine
 
-  - name: engine-cs
+  - name: csengine
     provisioner:
       pillars-from-files:
         docker.sls: pillar.cs.example
@@ -97,11 +97,6 @@ platforms:
       box: oracle-7
       box_url: http://cloud.terry.im/vagrant/oraclelinux-7-x86_64.box
 
-#  - name: fedora-21
-#    driver_config:
-#      box: bento/fedora-21
-#      box_url: https://atlas.hashicorp.com/bento/fedora-21
-
   - name: fedora-22
     provisioner:
       salt_bootstrap_options: -P git v2015.8.4
@@ -117,10 +112,11 @@ platforms:
       box_url: https://atlas.hashicorp.com/bento/fedora-23
 
 # suse's repos are not up to date with the official repos
-# have to use an older version
- 
-  - name: suse-13
-    driver_config:
-      box: bento/opensuse-13.2
-      box_url: https://atlas.hashicorp.com/bento/opensuse-13.2
+# have to use an older version, to test back the version to
+# 1.9.1
+# 
+#  - name: suse-13
+#    driver_config:
+#      box: bento/opensuse-13.2
+#      box_url: https://atlas.hashicorp.com/bento/opensuse-13.2
 
