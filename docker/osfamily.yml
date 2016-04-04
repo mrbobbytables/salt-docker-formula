@@ -1,0 +1,11 @@
+RedHat:
+  pkg:
+    name: docker-engine
+
+Debian:
+  pkg:
+    name: docker-engine
+
+Suse:
+  pkg:
+    name: docker

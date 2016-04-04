@@ -1,11 +1,11 @@
 docker:
   lookup:
     compose:
-      version: 1.6.0
+      version: 1.6.2
       completion: true
 
     engine:
-      version: 1.10.1
+      version: 1.9.1
       env_vars:
         DOCKER_HOST: /var/run/docker.sock
         TLS_VERIFY: TRUE

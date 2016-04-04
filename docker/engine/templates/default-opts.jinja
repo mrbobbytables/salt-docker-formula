@@ -1,0 +1,10 @@
+{% from "docker/map.jinja" import engine with context %}
+
+DOCKER_OPTS="
+{%- for key, value in engine.get("opts").iteritems() -%} 
+{% for opt in value %} --{{ key }}={{ opt }}{% endfor %}
+{%- endfor -%}"
+
+{% for key, value in engine.get("env_vars").iteritems() %}
+export {{key}}={{value}}
+{%- endfor -%} 
