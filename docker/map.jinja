@@ -93,4 +93,5 @@
 {# if any pillar data is present, merge it with the osdefaults prefering the pillar data #}
 {% set engine = salt['pillar.get']('docker:lookup:engine', default=defaults.engine, merge=true) %}
 {% set compose = salt['pillar.get']('docker:lookup:compose', default=defaults.compose, merge=true) %}
+{% set volume = salt['pillar.get']('docker:lookup:volume', default=defaults.volume, merge=true) %}
 

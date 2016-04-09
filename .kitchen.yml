@@ -6,7 +6,9 @@ driver:
 provisioner:
   name: salt_solo
   formula: docker
+  log_level: info
   salt_install: bootstrap
+  salt_bootstrap_options: -P git v2015.8.4
   pillars:
     top.sls:
       base:
@@ -47,66 +49,58 @@ suites:
       - fedora-23
       - suse-13
 
+  - name: volume
+    provisioner:
+      pillars-from-files:
+        docker.sls: pillar.example
+      state_top:
+        base:
+          '*':
+            - docker.engine.install
+            - docker.volume
+
 platforms:
   - name: debian-wheezy
-    provisioner:
-      salt_bootstrap_options: -P git v2015.8.4
     driver_config:
       box: debian/wheezy64
       box_url: https://atlas.hashicorp.com/debian/wheezy64
 
   - name: debian-jessie
-    provisioner:
-      salt_bootstrap_options: -P git v2015.8.4
     driver_config:
       box: debian/jessie64
       box_url: https://atlas.hashicorp.com/debian/jessie64
      
   - name: ubuntu-precise
-    provisioner:
-      salt_bootstrap_options: -P git v2015.8.4
     driver_config:
       box: ubuntu/precise64
       box_url: https://atlas.hashicorp.com/ubuntu/precise64
 
   - name: ubuntu-trusty
-    provisioner:
-      salt_bootstrap_options: -P git v2015.8.4
     driver_config:
       box: ubuntu/trusty64
       box_url: https://atlas.hashicorp.com/ubuntu/trusty64
 
   - name: ubuntu-vivid
-    provisioner:
-      salt_bootstrap_options: -P git v2015.8.4
     driver_config:
       box: ubuntu/vivid64
       box_url: https://atlas.hashicorp.com/ubuntu/vivid64
 
   - name: centos-7
-    provisioner:
-      salt_bootstrap_options: -P git v2015.8.4
     driver_config:
       box: centos/7
       box_url: https://atlas.hashicorp.com/centos/7
 
   - name: oracle-7
-    provisioner:
-      salt_bootstrap_options: -P git v2015.8.4
     driver_config:
       box: oracle-7
       box_url: http://cloud.terry.im/vagrant/oraclelinux-7-x86_64.box
 
   - name: fedora-22
-    provisioner:
-      salt_bootstrap_options: -P git v2015.8.4
     driver_config:
       box: bento/fedora-22
       box_url: https://atlas.hashicorp.com/bento/fedora-22
 
   - name: fedora-23
-    provisioner:
-      salt_bootstrap_options: -P git v2015.8.4
     driver_config:
       box: bento/fedora-23
       box_url: https://atlas.hashicorp.com/bento/fedora-23
