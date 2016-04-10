@@ -16,7 +16,6 @@ Tested with the following platforms:
 - Oracle Linux 7
 - Ubuntu 12.04 (Precise)
 - Ubuntu 14.04 (Trusty)
-- Ubuntu 15.04 (Vivid)
 
 
 .. contents::
@@ -79,5 +78,29 @@ Adds Official Docker repositories and installs docker-engine. If cs_engine is se
 
 Creates the docker group and adds any user specified in the docker engine pillar to be added to the group.
 This group is granted rights to execute docker without having to ``sudo``.
+
+
+``docker.volume``
+----------------
+
+Adds docker volumes based on supplied storage driver. Currently only ``local_persist`` is supported.
+
+
+**Pillar Example:**
+
+::
+
+  docker:
+   lookup:
+    volume:
+      driver:
+        local_persist:
+          version: 1.1.0
+          volumes:
+            test-persist:
+              mountpoint: /tmp/test
+
+
+
 
 

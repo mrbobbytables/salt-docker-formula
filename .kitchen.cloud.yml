@@ -19,8 +19,9 @@ transport:
 provisioner:
   name: salt_solo
   formula: docker
+  log_level: error
   salt_install: bootstrap
-  salt_bootstrap_options: -P git v2015.8.4
+#  salt_bootstrap_options: -P git v2015.8.4
   pillars:
     top.sls:
       base:
@@ -58,19 +59,23 @@ suites:
             - docker.engine.install
             - docker.engine.users
 
+  - name: volume
+    provisioner:
+      pillars-from-files:
+        docker.sls: pillar.cloud.example
+      state_top:
+        base:
+          '*':
+            - docker.engine.install
+            - docker.volume
+
+
 platforms:
-
-  - name: precise
+  - name: ubuntu-12.04
     transport:
       username: ubuntu
-    driver:
-      image_search:
-       name: "ubuntu/images/hvm/ubuntu-precise-12.04-amd64-server-*"
 
-  - name: trusty
+
+  - name: ubuntu-14.04
     transport:
       username: ubuntu
-    driver:
-      image_search:
-          name: "ubuntu/images/hvm/ubuntu-trusty-14.04-amd64-server-*"
-

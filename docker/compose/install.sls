@@ -1,7 +1,8 @@
 {% from 'docker/map.jinja' import compose with context %}
 
-curl:
-  pkg.installed
+get-compose-prereq-curl:
+  pkg.installed:
+    - name: curl
 
 get-compose:
   cmd.run:
@@ -10,7 +11,7 @@ get-compose:
         chmod +x /usr/local/bin/docker-compose
     - unless: docker-compose --version | grep -q {{ compose.version }}
     - require:
-      - pkg: curl
+      - pkg: get-compose-prereq-curl
 
 {% if compose.completion %}
 get-compose-completion:
@@ -20,5 +21,5 @@ get-compose-completion:
     - watch:
       - cmd: get-compose
     - require:
-      - pkg: curl
+      - pkg: get-compose-prereq-curl
 {% endif %}
