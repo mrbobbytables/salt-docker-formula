@@ -59,6 +59,17 @@ suites:
             - docker.engine.install
             - docker.engine.users
 
+  - name: volume
+    provisioner:
+      pillars-from-files:
+        docker.sls: pillar.cloud.example
+      state_top:
+        base:
+          '*':
+            - docker.engine.install
+            - docker.volume
+
+
 platforms:
   - name: ubuntu-12.04
     transport:
@@ -68,5 +79,3 @@ platforms:
   - name: ubuntu-14.04
     transport:
       username: ubuntu
-
-

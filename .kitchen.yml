@@ -44,7 +44,6 @@ suites:
           '*':
             - docker.engine
     excludes:
-      - ubuntu-vivid
       - fedora-22
       - fedora-23
       - suse-13
@@ -58,6 +57,8 @@ suites:
           '*':
             - docker.engine.install
             - docker.volume
+    excludes:
+      - debian-wheezy
 
 platforms:
   - name: debian-wheezy
@@ -79,11 +80,6 @@ platforms:
     driver_config:
       box: ubuntu/trusty64
       box_url: https://atlas.hashicorp.com/ubuntu/trusty64
-
-  - name: ubuntu-vivid
-    driver_config:
-      box: ubuntu/vivid64
-      box_url: https://atlas.hashicorp.com/ubuntu/vivid64
 
   - name: centos-7
     driver_config:

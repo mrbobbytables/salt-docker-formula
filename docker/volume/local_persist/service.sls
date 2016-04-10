@@ -9,7 +9,7 @@ local-persist-create-service-def:
     - source: salt://docker/volume/local_persist/files/local-persist.upstart
 {% elif provider == 'systemd' %}
     - name: /etc/systemd/system/docker-volume-local-persist.service
-    - source: salt://docker/volume/local_persist/files/local-persist.service
+    - source: salt://docker/volume/local_persist/files/local-persist.systemd
   module.wait:
     - name: service.systemctl_reload
     - watch:
