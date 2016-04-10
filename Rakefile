@@ -56,6 +56,12 @@ namespace :test do
     task :compose do
       task_runner(config, 'compose', 'test', concurrency)
     end
+ 
+    desc 'Execute the Vagrant test suite for Docker Volume'
+    task :volume do
+      task_runner(config, 'volume', 'test', concurrency)
+    end
+ 
 
     desc 'Destroy all Vagrant instances.'
     task :destroy do
@@ -104,6 +110,12 @@ namespace :test do
       task :compose do
         task_runner(config, 'compose', 'test', concurrency)
       end
+
+      desc 'Execute the Cloud test suite for Docker Volume'
+      task :volume do
+        task_runner(config, 'volume', 'test', concurrency)
+      end
+
 
       desc 'Destroy all Cloud instances.'
       task :destroy do
