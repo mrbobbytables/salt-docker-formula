@@ -11,7 +11,7 @@ get-docker-volume-driver-local-persist:
     - name: | 
         curl -L {{ local_persist_url }} > /usr/local/bin/docker-volume-local-persist-{{ local_persist.version }}
         chmod +x /usr/local/bin/docker-volume-local-persist-{{ local_persist.version }}
-    - unless: docker-volume-local-persist --version | grep -q {{ local_persist.version }}
+    - unless: test -f /usr/local/bin/docker-volume-local-persist-{{ local_persist.version }}
     - require:
       - pkg: local-persist-prereq-install-curl
 
