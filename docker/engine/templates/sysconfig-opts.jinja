@@ -1,0 +1,16 @@
+{% from "docker/map.jinja" import engine with context %}
+
+# /etc/sysconfig/docker
+#
+# Other arguments to pass to the docker daemon process
+# These will be parsed by the sysv initscript and appended
+# to the arguments list passed to docker -d
+
+other_args="
+{%- for key, value in engine.get("opts").iteritems() -%}
+{% for opt in value %} --{{ key }}={{ opt }}{% endfor %}
+{%- endfor -%}"
+
+{% for key, value in engine.get("env_vars").iteritems() %}
+export {{key}}={{value}}
+{%- endfor -%}

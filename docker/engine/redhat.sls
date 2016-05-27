@@ -20,8 +20,3 @@ docker-engine-install:
     {% endif %}
     - require:
       - pkgrepo: docker-engine-repo
-
-{% if engine.opts_type == 'systemd' %}
-include:
-  - docker.engine.systemd
-{% endif %}

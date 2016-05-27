@@ -76,14 +76,16 @@
     } %}
     {% do salt['slsutil.update'](os_defaults, tmp_os_defaults) %}
   {% endif %}
-{% endif %}  
+{% endif %}
 
 
 {% set provider = salt['test.provider']('service')|lower %}
 {% if provider == 'systemd' %}
   {% do salt['slsutil.update'](os_defaults, {'opts_type' : 'systemd'}) %}
-{% elif provider in [ 'upstart', 'debian_service'] %}
-  {% do salt['slsutil.update'](os_defaults, {'opts_type' : 'default'}) %}
+{% elif provider in [ 'upstart', 'debian_service' ] %}
+  {% do salt['slsutil.update'](os_defaults, {'opts_type' : 'sysvinit'}) %}
+{% elif provider in [ 'rh_service' ] %}
+  {% do salt['slsutil.update'](os_defaults, {'opts_type' : 'sysconfig'}) %}
 {% endif %}
 
 
@@ -94,4 +96,5 @@
 {% set engine = salt['pillar.get']('docker:lookup:engine', default=defaults.engine, merge=true) %}
 {% set compose = salt['pillar.get']('docker:lookup:compose', default=defaults.compose, merge=true) %}
 {% set volume = salt['pillar.get']('docker:lookup:volume', default=defaults.volume, merge=true) %}
-
+{% set images = salt['pillar.get']('docker:lookup:images', default=defaults.images, merge=true) %}
+{% set containers = salt['pillar.get']('docker:lookup:containers', default=defaults.containers, merge=true) %}
