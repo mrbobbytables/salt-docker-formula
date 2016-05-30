@@ -24,3 +24,16 @@ docker:
             test-persist:
               mountpoint: /tmp/test
             
+    images:
+      - registry:2
+      - ubuntu:14.04
+    
+    containers:
+      test:
+        image: "ubuntu:14.04"
+        binds:
+          - /mnt/data/:/opt/data/:rw
+        port_bindings:
+          - 5000:5000
+        network_mode: bridge
+        restart_policy: always

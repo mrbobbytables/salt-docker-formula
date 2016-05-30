@@ -7,6 +7,7 @@ Formula for managing the install and configuration of both Docker-Engine and Doc
 
 Tested with the following platforms:
 
+- CentOS 6
 - CentOS 7
 - Debian 7 (Wheezy)
 - Debian 8 (Jessie)
@@ -101,6 +102,41 @@ Adds docker volumes based on supplied storage driver. Currently only ``local_per
               mountpoint: /tmp/test
 
 
+``docker.images``
+----------------
+
+Downloads specified images.
 
 
+**Pillar Example:**
+
+::
+
+  docker:
+   lookup:
+    images:
+      - registry:2
+      - ubuntu:14.04
+
+``docker.containers``
+----------------
+
+Runs and configures containers. Options are passed to the dockerng module.
+
+
+**Pillar Example:**
+
+::
+
+  docker:
+   lookup:    
+    containers:
+      test:
+        image: "ubuntu:14.04"
+        binds:
+          - /mnt/data/:/opt/data/:rw
+        port_bindings:
+          - 5000:5000
+        network_mode: bridge
+        restart_policy: always
 
